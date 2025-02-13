@@ -18,6 +18,12 @@ class StudentController extends Controller
 
         $this->applySearch($studentsQuery, $request->search);
 
+        if($request->section) {
+            $studentsQuery->whereHas('section',function($query) use ($request) {
+                $query->where('id', $request->section);
+            });
+        }
+
         $students = StudentResource::collection(
             $studentsQuery->paginate(10)
         );

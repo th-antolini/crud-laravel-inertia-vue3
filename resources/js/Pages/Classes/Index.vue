@@ -2,10 +2,10 @@
     import MagnifyingGlass from '@/Components/Icons/MagnifyingGlass.vue';
     import Pencil from '@/Components/Icons/Pencil.vue';
     import Trash from '@/Components/Icons/Trash.vue';
+    import StudentsIcon from '@/Components/Icons/StudentsIcon.vue';
     import Pagination from '@/Components/Pagination.vue';
     import { Link, Head, useForm, router, usePage } from '@inertiajs/vue3'
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
-    import axios from 'axios';
     import { ref, computed, watch } from 'vue';
 
     const props = defineProps({
@@ -92,7 +92,7 @@
                         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                             <Link
                                 :href="route('classes.create')"
-                                class="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                                class="inline-flex items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                             >
                                 Add Class
                             </Link>
@@ -179,14 +179,23 @@
 
                                                 <td class="flex pt-3">
                                                     <Link
+                                                        :href="route('students.index', { search: item.name, page: 1 })"
+                                                        class="text-green-600 hover:text-green-800 pr-2"
+                                                        title="Show students of the class"
+                                                    > 
+                                                        <StudentsIcon />
+                                                    </Link>
+                                                    <Link
                                                         :href="route('classes.edit', item.id)"
                                                         class="text-yellow-600 hover:text-yellow-800"
+                                                        title="Edit Class"
                                                     > 
                                                         <Pencil />
                                                     </Link>
                                                     <button
                                                         @click="deleteClass(item.id)"
                                                         class="ml-2 text-red-700 hover:text-red-900"
+                                                        title="Delete Class"
                                                     >
                                                         <Trash />
                                                     </button>

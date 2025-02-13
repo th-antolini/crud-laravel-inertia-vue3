@@ -3,40 +3,48 @@
     import InputError from '@/Components/InputError.vue';
     import { Head, useForm, Link } from '@inertiajs/vue3';
 
-    const form = useForm({
-        name: ''
+    const props = defineProps({
+        classes: {
+            type: Object,
+            required: true
+        }
     })
 
-    const createClass = () => {
-        form.post(route('classes.store'))
+    const form = useForm({
+        name: '',
+        class_id: ''
+    })
+
+    const createSection = () => {
+        form.post(route('sections.store'))
     }
 </script>
 
 <template>
-    <Head title="Create Class" />
+    <Head title="Create Section" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
             >
-                Create Class
+                Create Section
             </h2>
         </template>
         <div class="max-w-7xl mx-auto py-6 sm:px-6 lg:px-8">
             <div class="lg:grid lg:grid-cols-12 lg:gap-x-5">
                 <div class="space-y-6 sm:px-6 lg:px-0 lg:col-span-12">
-                    <form @submit.prevent="createClass">
+                    <form @submit.prevent="createSection">
                         <div class="shadow sm:rounded-md sm:overflow-hidden">
                             <div class="bg-white py-6 px-4 space-y-6 sm:p-6">
                                 <div>
                                     <h3
                                         class="text-lg leading-6 font-medium text-gray-900"
                                     >
-                                        Class Information
+                                        Section Information
                                     </h3>
                                     <p class="mt-1 text-sm text-gray-500">
-                                        Use this form to create a new class.
+                                        Use this form to create a new section.
                                     </p>
                                 </div>
 
@@ -56,13 +64,37 @@
                                         />
                                         <InputError :message="form.errors.name" class="mt-2" />
                                     </div>
+                                    <div class="col-span-6 sm:col-span-3">
+                                        <label
+                                            for="class_id"
+                                            class="block text-sm font-medium text-gray-700"
+                                            >Class</label
+                                        >
+                                        <select
+                                            v-model="form.class_id"
+                                            id="class_id"
+                                            :class="{'text-red-900 focus:ring-red-500 focus:border-red-500 border-red-300' : form.errors.class_id}"
+                                            class="mt-1 block w-full bg-white border border-gray-300 rounded-md shadow-sm py-2 px-3 focus:outline-none focus:ring-indigo-500 focus:border-indigo-500 sm:text-sm"
+                                        >
+                                            <option value="">
+                                                Select a Class
+                                            </option>
+                                            <option 
+                                                v-for="item in classes.data"
+                                                :key="item.id"
+                                                :value="item.id">
+                                                {{ item.name }}
+                                            </option>
+                                        </select>
+                                        <InputError :message="form.errors.class_id" class="mt-2" />
+                                    </div>
                                 </div>
                             </div>
                             <div
                                 class="px-4 py-3 bg-gray-50 text-right sm:px-6"
                             >
                                 <Link
-                                    :href="route('classes.index')"
+                                    :href="route('sections.index')"
                                     class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-indigo-700 bg-indigo-100 hover:bg-indigo-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-indigo-500 mr-4"
                                 >
                                     Cancel

@@ -2,22 +2,34 @@
     import MagnifyingGlass from '@/Components/Icons/MagnifyingGlass.vue';
     import Pencil from '@/Components/Icons/Pencil.vue';
     import Trash from '@/Components/Icons/Trash.vue';
+    import StudentsIcon from '@/Components/Icons/StudentsIcon.vue';
     import Pagination from '@/Components/Pagination.vue';
     import { Link, Head, useForm, router, usePage } from '@inertiajs/vue3'
     import AuthenticatedLayout from '@/Layouts/AuthenticatedLayout.vue';
     import { ref, computed, watch } from 'vue';
 
     const props = defineProps({
-        students: {
+        sections: {
             type: Object,
             required: true
         }
     })
 
+    const flash = computed(() => usePage().props.flash);
+
+    watch(flash, (newFlash) => {
+        if (newFlash.success) {
+            alert(newFlash.success);
+        }
+        if (newFlash.error) {
+            alert(newFlash.error);
+        }
+    }, { deep: true })
+
     let search = ref(usePage().props.search), pageNumber = ref(1);
 
     let searchUrl = computed(() => {
-        let url = new URL(route('students.index'));
+        let url = new URL(route('sections.index'));
         url.searchParams.append("page", pageNumber.value);
 
         if (search.value) {
@@ -47,9 +59,9 @@
 
     const deleteForm = useForm();
 
-    const deleteStudent = (studentId) => {
-        if (confirm('Are you sure you want to delete this student?')) {
-            deleteForm.delete(route('students.destroy', studentId), {
+    const deleteSection = (sectionId) => {
+        if (confirm('Are you sure you want to delete this section?')) {
+            deleteForm.delete(route('sections.destroy', sectionId), {
                 preserveScroll: true,
             });
         }
@@ -57,14 +69,14 @@
 </script>
 
 <template>
-    <Head title="Students List" />
+    <Head title="Sections List" />
 
     <AuthenticatedLayout>
         <template #header>
             <h2
                 class="text-xl font-semibold leading-tight text-gray-800 dark:text-gray-200"
             >
-                Students List
+                Sections List
             </h2>
         </template>
         <div class="py-10">
@@ -73,16 +85,16 @@
                     <div class="sm:flex sm:items-center">
                         <div class="sm:flex-auto">
                             <h1 class="text-xl font-regular text-white">
-                                A list of all the Students.
+                                A list of all the Sections.
                             </h1>
                         </div>
 
                         <div class="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
                             <Link
-                                :href="route('students.create')"
+                                :href="route('sections.create')"
                                 class="inline-flex items-center justify-center rounded-md border border-transparent bg-emerald-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-emerald-800 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                             >
-                                Add Student
+                                Add Section
                             </Link>
                         </div>
                     </div>
@@ -99,9 +111,9 @@
                                 v-model="search"
                                 type="text"
                                 autocomplete="off"
-                                placeholder="Search students data..."
+                                placeholder="Search sections data..."
                                 id="search"
-                                class="block dark:bg-gray-800 rounded-lg border-0 py-2 pl-10 text-white ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                class="block rounded-lg dark:bg-gray-800 border-0 py-2 pl-10 text-white ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -135,19 +147,7 @@
                                                     scope="col"
                                                     class="py-3.5 pl-4 pr-3 text-left text-sm font-semibold text-white sm:pl-6"
                                                 >
-                                                    Email
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-white"
-                                                >
                                                     Class
-                                                </th>
-                                                <th
-                                                    scope="col"
-                                                    class="px-3 py-3.5 text-left text-sm font-semibold text-white"
-                                                >
-                                                    Section
                                                 </th>
                                                 <th
                                                     scope="col"
@@ -166,50 +166,47 @@
                                         <tbody
                                             class="divide-y divide-gray-200 bg-white"
                                         >
-                                            <tr v-for="student in students.data" :key="student.id" class="dark:bg-gray-700">
+                                            <tr v-for="section in sections.data" :key="section.id" class="dark:bg-gray-700">
                                                 <td
                                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6"
                                                 >
-                                                    {{ student.id }}
+                                                    {{ section.id }}
                                                 </td>
                                                 <td
                                                     class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6"
                                                 >
-                                                    {{ student.name }}
+                                                    {{ section.name }}
+                                                </td>
+                                                <td
+                                                    class="whitespace-nowrap py-4 pl-4 pr-3 text-sm font-medium text-white sm:pl-6"
+                                                >
+                                                    {{ section.class.name }}
                                                 </td>
                                                 <td
                                                     class="whitespace-nowrap px-3 py-4 text-sm text-white"
                                                 >
-                                                    {{ student.email }}
-                                                </td>
-                                                <td
-                                                    class="whitespace-nowrap px-3 py-4 text-sm text-white"
-                                                >
-                                                    {{ student.class.name }}
-                                                </td>
-                                                <td
-                                                    class="whitespace-nowrap px-3 py-4 text-sm text-white"
-                                                >
-                                                    {{ student.section.name }}
-                                                </td>
-                                                <td
-                                                    class="whitespace-nowrap px-3 py-4 text-sm text-white"
-                                                >
-                                                    {{ student.created_at }}
+                                                    {{ section.created_at }}
                                                 </td>
 
                                                 <td class="flex pt-3">
                                                     <Link
-                                                        :href="route('students.edit', student.id)"
+                                                        :href="route('students.index', { section: section.id, page: 1 })"
+                                                        class="text-green-600 hover:text-green-800 pr-2"
+                                                        title="Show students of the section"
+                                                    > 
+                                                        <StudentsIcon />
+                                                    </Link>
+                                                    <Link
+                                                        :href="route('sections.edit', section.id)"
                                                         class="text-yellow-600 hover:text-yellow-800"
-                                                        title="Edit Student"
+                                                        title="Edit Section"
                                                     > 
                                                         <Pencil />
                                                     </Link>
                                                     <button
-                                                        @click="deleteStudent(student.id)"
+                                                        @click="deleteSection(section.id)"
                                                         class="ml-2 text-red-700 hover:text-red-900"
-                                                        title="Delete Student"
+                                                        title="Delete Section"
                                                     >
                                                         <Trash />
                                                     </button>
@@ -218,7 +215,7 @@
                                         </tbody>
                                     </table>
                                 </div>
-                                <Pagination :meta="students.meta" :updatedPageNumber="updatedPageNumber"/>
+                                <Pagination :meta="sections.meta" :updatedPageNumber="updatedPageNumber"/>
                             </div>
                         </div>
                     </div>
