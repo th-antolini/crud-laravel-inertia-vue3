@@ -102,7 +102,7 @@
                                 autocomplete="off"
                                 placeholder="Search students data..."
                                 id="search"
-                                class="block dark:bg-gray-800 rounded-lg border-0 py-2 pl-10 text-gray-900 ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
+                                class="block dark:bg-gray-800 rounded-lg border-0 py-2 pl-10 text-white ring-1 ring-inset ring-gray-200 placeholder:text-gray-400 focus:ring-2 focus:ring-inset focus:ring-indigo-600 sm:text-sm sm:leading-6"
                             />
                         </div>
                     </div>
@@ -158,8 +158,10 @@
                                                 </th>
                                                 <th
                                                     scope="col"
-                                                    class="relative py-3.5 pl-3 pr-4 sm:pr-6"
-                                                />
+                                                    class="relative py-3.5 pr-4 text-sm sm:pr-6 text-left text-white"
+                                                >
+                                                    Actions
+                                                </th>
                                             </tr>
                                         </thead>
                                         <tbody

@@ -32,7 +32,10 @@ class StudentController extends Controller
     {
         return $query->when($search, function ($query, $search) {
             $query->where('name', 'like', '%'. $search .'%')
-                ->orWhere('email', 'like', '%'. $search .'%');
+                ->orWhere('email', 'like', '%'. $search .'%')
+                ->orWhereHas('class', function($query) use ($search) {
+                    $query->where('name', 'like', '%'. $search);
+                });
         });
     }
 
